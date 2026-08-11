@@ -47,14 +47,66 @@ button {
 }
 
 .app {
+  position: relative;
   min-height: 100vh;
   background: var(--white);
+}
+
+.top-admin-bar {
+  position: fixed;
+  top: 10px;
+  left: 12px;
+  z-index: 30;
+}
+
+.admin-icon-button {
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.94);
+}
+
+.edit-mode-strip {
+  position: sticky;
+  top: 0;
+  z-index: 25;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: min(100%, 520px);
+  margin: 0 auto;
+  padding: 9px 18px;
+  color: var(--text);
+  background: #eef7ff;
+  border-bottom: 1px solid #cfeaff;
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.edit-mode-strip button {
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  border-radius: 999px;
+  padding: 0 11px;
+  color: var(--white);
+  background: var(--blue-active);
+  font-size: 12px;
+  font-weight: 850;
 }
 
 .page-shell {
   width: min(100%, 520px);
   margin: 0 auto;
-  padding: 28px 18px calc(104px + env(safe-area-inset-bottom));
+  padding: 48px 18px calc(104px + env(safe-area-inset-bottom));
 }
 
 .home-page {
@@ -127,6 +179,131 @@ p {
   padding: 0 22px;
   border-radius: 18px;
   font-weight: 850;
+}
+
+.editable-title-row {
+  display: grid;
+  gap: 10px;
+  width: 100%;
+}
+
+.title-edit-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.admin-action-button {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 0;
+  border-radius: 13px;
+  padding: 0 14px;
+  color: var(--white);
+  background: var(--blue);
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.admin-action-secondary {
+  color: var(--text);
+  background: #eef2f7;
+}
+
+.title-edit-field {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+}
+
+.title-edit-field span,
+.admin-login-form span {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.title-edit-field input,
+.admin-login-form input {
+  width: 100%;
+  min-height: 52px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 0 14px;
+  color: var(--text);
+  background: var(--white);
+  font: inherit;
+  outline: none;
+}
+
+.title-edit-field input:focus,
+.admin-login-form input:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(73, 170, 242, 0.15);
+}
+
+.inline-status {
+  color: var(--blue-active);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.admin-login-page {
+  min-height: calc(100vh - 120px);
+  display: grid;
+  align-content: center;
+  gap: 24px;
+}
+
+.admin-login-header {
+  display: grid;
+  gap: 10px;
+}
+
+.admin-login-header svg {
+  color: var(--blue);
+}
+
+.admin-login-header h1 {
+  color: var(--text);
+  font-size: clamp(29px, 8vw, 40px);
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.admin-login-header p,
+.form-error {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.admin-login-form {
+  display: grid;
+  gap: 14px;
+}
+
+.admin-login-form label {
+  display: grid;
+  gap: 8px;
+}
+
+.admin-login-form .primary-button {
+  width: 100%;
+}
+
+.admin-login-form .primary-button:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.form-error {
+  color: #b42318;
+  font-weight: 800;
 }
 
 .content-page {
@@ -286,7 +463,10 @@ p {
 
 .primary-button:focus-visible,
 .bottom-nav button:focus-visible,
-.social-links a:focus-visible {
+.social-links a:focus-visible,
+.admin-icon-button:focus-visible,
+.admin-action-button:focus-visible,
+.edit-mode-strip button:focus-visible {
   outline: 3px solid #111827;
   outline-offset: 3px;
 }
