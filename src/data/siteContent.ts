@@ -1,12 +1,79 @@
 export type PageId = "home" | "photos" | "about";
+export type PhotoSize = "square" | "medium" | "tall";
+export type PhotoTone = "silver" | "blue" | "darkBlue" | "gray" | "softBlue";
 
-export const siteContent = {
+export type NavigationItem = {
+  id: PageId;
+  label: string;
+  order: number;
+};
+
+export type ActionButton = {
+  id: string;
+  label: string;
+  href: string;
+  targetPage?: PageId;
+  order: number;
+};
+
+export type PhotoItem = {
+  id: string;
+  number: string;
+  title: string;
+  subtitle: string;
+  note: string;
+  size: PhotoSize;
+  tone: PhotoTone;
+  order: number;
+  previewUrl?: string;
+};
+
+export type SocialLink = {
+  id: "instagram" | "tiktok" | "youtube" | string;
+  label: string;
+  href: string;
+  order: number;
+};
+
+export type SiteContent = {
+  siteName: string;
+  navigation: NavigationItem[];
+  pages: {
+    home: {
+      title: string;
+      logoLabel: string;
+      headline: string;
+      body: string;
+      buttons: ActionButton[];
+    };
+    photos: {
+      title: string;
+      intro: string;
+      items: PhotoItem[];
+    };
+    about: {
+      title: string;
+      body: string;
+      followTitle: string;
+      socialLinks: SocialLink[];
+    };
+  };
+};
+
+// Demo-only frontend credentials. This is intentionally temporary and must be
+// replaced later with a real secure backend authentication system.
+export const demoAdminCredentials = {
+  email: "admin@demo.com",
+  password: "123456",
+};
+
+export const siteContent: SiteContent = {
   siteName: "التواصل البديل",
   navigation: [
     { id: "home", label: "الرئيسية", order: 1 },
     { id: "photos", label: "الصور", order: 2 },
     { id: "about", label: "من نحن", order: 3 },
-  ] satisfies Array<{ id: PageId; label: string; order: number }>,
+  ],
   pages: {
     home: {
       title: "التواصل البديل",
@@ -18,6 +85,7 @@ export const siteContent = {
         {
           id: "browsePhotos",
           label: "تصفّح الصور",
+          href: "#photos",
           targetPage: "photos",
           order: 1,
         },
@@ -27,8 +95,8 @@ export const siteContent = {
       title: "الصور",
       intro: "معرض تجريبي بأحجام مختلفة لمراجعة شكل العرض على الجوال.",
       items: Array.from({ length: 20 }, (_, index) => {
-        const sizePattern = ["square", "medium", "tall", "medium"] as const;
-        const tonePattern = ["silver", "blue", "darkBlue", "gray", "softBlue"] as const;
+        const sizePattern: PhotoSize[] = ["square", "medium", "tall", "medium"];
+        const tonePattern: PhotoTone[] = ["silver", "blue", "darkBlue", "gray", "softBlue"];
 
         return {
           id: `photo-${String(index + 1).padStart(2, "0")}`,
@@ -54,4 +122,4 @@ export const siteContent = {
       ],
     },
   },
-} as const;
+};

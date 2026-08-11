@@ -47,14 +47,72 @@ button {
 }
 
 .app {
+  position: relative;
   min-height: 100vh;
   background: var(--white);
+}
+
+.admin-entry-button {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 35;
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: rgba(17, 24, 39, 0.58);
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.edit-mode-bar {
+  position: sticky;
+  top: 0;
+  z-index: 32;
+  width: min(100%, 520px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 0 auto;
+  padding: 9px 16px;
+  color: var(--text);
+  background: #eef7ff;
+  border-bottom: 1px solid #cdeaff;
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.edit-mode-bar div {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.edit-mode-bar button,
+.edit-chip,
+.add-photo-button {
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 0;
+  border-radius: 999px;
+  padding: 0 11px;
+  color: var(--white);
+  background: var(--blue);
+  font-size: 12px;
+  font-weight: 850;
 }
 
 .page-shell {
   width: min(100%, 520px);
   margin: 0 auto;
-  padding: 28px 18px calc(104px + env(safe-area-inset-bottom));
+  padding: 42px 18px calc(104px + env(safe-area-inset-bottom));
 }
 
 .home-page {
@@ -129,6 +187,79 @@ p {
   font-weight: 850;
 }
 
+.button-stack {
+  display: grid;
+  gap: 10px;
+}
+
+.editable-line,
+.editable-block {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+}
+
+.editable-block {
+  align-items: flex-start;
+}
+
+.editable-line > :first-child,
+.editable-block > :first-child {
+  min-width: 0;
+}
+
+.edit-icon-button {
+  flex: 0 0 auto;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #d8e8f8;
+  border-radius: 999px;
+  color: var(--blue-active);
+  background: #f4fbff;
+}
+
+.page-edit-buttons {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 6px;
+}
+
+.editable-button-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.editable-button-row .primary-button,
+.editable-button-row a {
+  flex: 1 1 auto;
+}
+
+.add-button-chip {
+  justify-self: start;
+}
+
+.add-photo-button {
+  justify-self: start;
+  min-height: 42px;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+.add-photo-button input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
 .content-page {
   display: grid;
   gap: 20px;
@@ -146,6 +277,7 @@ p {
 }
 
 .photo-tile {
+  position: relative;
   break-inside: avoid;
   width: 100%;
   display: grid;
@@ -158,6 +290,51 @@ p {
   color: var(--white);
   text-align: center;
   overflow: hidden;
+}
+
+.photo-tile.has-preview {
+  background: #111827;
+}
+
+.photo-tile.has-preview > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.54;
+}
+
+.photo-tile > svg,
+.photo-tile strong,
+.photo-tile span,
+.photo-tile small,
+.photo-tile em {
+  position: relative;
+  z-index: 1;
+}
+
+.photo-edit-tools {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  left: 8px;
+  z-index: 3;
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+}
+
+.photo-edit-tools button {
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 999px;
+  color: var(--white);
+  background: rgba(17, 24, 39, 0.58);
 }
 
 .photo-tile strong {
@@ -235,12 +412,137 @@ p {
 }
 
 .social-links a {
+  width: 100%;
   min-height: 52px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   border-radius: 18px;
+  font-weight: 850;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background: rgba(17, 24, 39, 0.2);
+  backdrop-filter: blur(5px);
+}
+
+.login-modal {
+  position: relative;
+  width: min(100%, 420px);
+  display: grid;
+  gap: 20px;
+  padding: 24px 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  color: var(--text);
+  background: var(--white);
+}
+
+.modal-close {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 999px;
+  color: var(--muted);
+  background: #f3f4f6;
+}
+
+.login-modal-heading {
+  display: grid;
+  gap: 7px;
+  padding-left: 34px;
+}
+
+.login-modal-heading h2 {
+  color: var(--text);
+  font-size: 26px;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.login-modal-heading p,
+.form-error {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.login-form,
+.edit-modal {
+  display: grid;
+  gap: 14px;
+}
+
+.login-form label,
+.edit-field {
+  display: grid;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.login-form input,
+.edit-field input,
+.edit-field textarea {
+  width: 100%;
+  min-height: 52px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 0 14px;
+  color: var(--text);
+  background: var(--white);
+  font: inherit;
+  outline: none;
+}
+
+.edit-field textarea {
+  min-height: 120px;
+  padding: 13px 14px;
+  resize: vertical;
+}
+
+.login-form input:focus,
+.edit-field input:focus,
+.edit-field textarea:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(73, 170, 242, 0.15);
+}
+
+.form-error {
+  color: #b42318;
+  font-weight: 850;
+}
+
+.login-submit,
+.edit-modal-actions .primary-button {
+  width: 100%;
+}
+
+.edit-modal-actions {
+  display: grid;
+  gap: 10px;
+}
+
+.secondary-button {
+  min-height: 50px;
+  border: 0;
+  border-radius: 16px;
+  color: var(--text);
+  background: #eef2f7;
   font-weight: 850;
 }
 
@@ -286,7 +588,15 @@ p {
 
 .primary-button:focus-visible,
 .bottom-nav button:focus-visible,
-.social-links a:focus-visible {
+.social-links a:focus-visible,
+.admin-entry-button:focus-visible,
+.edit-mode-bar button:focus-visible,
+.edit-icon-button:focus-visible,
+.edit-chip:focus-visible,
+.add-photo-button:focus-within,
+.photo-edit-tools button:focus-visible,
+.modal-close:focus-visible,
+.secondary-button:focus-visible {
   outline: 3px solid #111827;
   outline-offset: 3px;
 }
