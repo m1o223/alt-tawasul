@@ -30,8 +30,9 @@ export type PhotoItem = {
 
 export type SocialLink = {
   id: "instagram" | "tiktok" | "youtube" | string;
-  label: string;
-  href: string;
+  name: string;
+  url: string;
+  icon: string;
   order: number;
 };
 
@@ -116,9 +117,9 @@ export const siteContent: SiteContent = {
         "التواصل البديل موقع تجريبي قيد التصميم، هدفه عرض تجربة بسيطة ونظيفة تناسب تصفح الجوال قبل إضافة المحتوى الحقيقي.",
       followTitle: "تابعونا",
       socialLinks: [
-        { id: "instagram", label: "Instagram", href: "https://www.instagram.com/example", order: 1 },
-        { id: "tiktok", label: "TikTok", href: "https://www.tiktok.com/@example", order: 2 },
-        { id: "youtube", label: "YouTube", href: "https://www.youtube.com/@example", order: 3 },
+        { id: "instagram", name: "Instagram", url: "https://www.instagram.com", icon: "instagram", order: 1 },
+        { id: "tiktok", name: "TikTok", url: "https://www.tiktok.com", icon: "tiktok", order: 2 },
+        { id: "youtube", name: "YouTube", url: "https://www.youtube.com", icon: "youtube", order: 3 },
       ],
     },
   },

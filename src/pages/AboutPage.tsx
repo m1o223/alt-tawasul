@@ -39,7 +39,7 @@ export function AboutPage({ content, isDemoEditMode, onEditText, onChangeSocialL
   const [isEditingLinks, setIsEditingLinks] = useState(false);
   const [draftLinks, setDraftLinks] = useState<SocialLink[]>(() => orderedLinks(content.socialLinks));
   const [newLinkName, setNewLinkName] = useState("");
-  const [newLinkHref, setNewLinkHref] = useState("");
+  const [newLinkUrl, setNewLinkUrl] = useState("");
   const [linkError, setLinkError] = useState("");
 
   useEffect(() => {
@@ -167,8 +167,8 @@ export function AboutPage({ content, isDemoEditMode, onEditText, onChangeSocialL
               <span>الرابط</span>
               <input
                 dir="ltr"
-                value={newLinkHref}
-                onChange={(event) => setNewLinkHref(event.target.value)}
+                value={newLinkUrl}
+                onChange={(event) => setNewLinkUrl(event.target.value)}
                 placeholder="https://www.example.com"
               />
             </label>
@@ -187,7 +187,7 @@ export function AboutPage({ content, isDemoEditMode, onEditText, onChangeSocialL
         {isEditingLinks ? (
           <div className="social-link-editor">
             {draftLinks.map((link, index) => {
-              const Icon = iconForPlatform(link.label);
+              const Icon = iconForLink(link);
 
               return (
                 <div className="social-edit-row" key={link.id}>
@@ -202,16 +202,21 @@ export function AboutPage({ content, isDemoEditMode, onEditText, onChangeSocialL
                     <label>
                       <span>الاسم</span>
                       <input
-                        value={link.label}
-                        onChange={(event) => updateDraftLink(link.id, { label: event.target.value })}
+                        value={link.name}
+                        onChange={(event) =>
+                          updateDraftLink(link.id, {
+                            name: event.target.value,
+                            icon: iconKeyForName(event.target.value),
+                          })
+                        }
                       />
                     </label>
                     <label>
                       <span>الرابط</span>
                       <input
                         dir="ltr"
-                        value={link.href}
-                        onChange={(event) => updateDraftLink(link.id, { href: event.target.value })}
+                        value={link.url}
+                        onChange={(event) => updateDraftLink(link.id, { url: event.target.value })}
                       />
                     </label>
                     <div className="social-row-tools">
@@ -249,12 +254,12 @@ export function AboutPage({ content, isDemoEditMode, onEditText, onChangeSocialL
         ) : (
           <div className="social-links">
             {visibleLinks.map((link) => {
-              const Icon = iconForPlatform(link.label);
+              const Icon = iconForLink(link);
 
               return (
-                <a href={link.href} target={isExternalLink(link.href) ? "_blank" : undefined} rel="noreferrer" key={link.id}>
+                <a href={link.url} target={isExternalLink(link.url) ? "_blank" : undefined} rel="noreferrer" key={link.id}>
                   <Icon aria-hidden="true" size={19} strokeWidth={2.4} />
-                  <span>{link.label}</span>
+                  <span>{link.name}</span>
                 </a>
               );
             })}
@@ -267,9 +272,9 @@ export function AboutPage({ content, isDemoEditMode, onEditText, onChangeSocialL
   function addSocialLink(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const label = newLinkName.trim();
-    const href = newLinkHref.trim();
-    const error = validateLinkInput(label, href);
+    const name = newLinkName.trim();
+    const url = newLinkUrl.trim();
+    const error = validateLinkInput(name, url);
 
     if (error) {
       setLinkError(error);
@@ -278,21 +283,22 @@ export function AboutPage({ content, isDemoEditMode, onEditText, onChangeSocialL
 
     const nextLink: SocialLink = {
       id: `social-${Date.now()}`,
-      label,
-      href,
+      name,
+      url,
+      icon: iconKeyForName(name),
       order: visibleLinks.length + 1,
     };
 
     onChangeSocialLinks(renumberLinks([...visibleLinks, nextLink]));
     setNewLinkName("");
-    setNewLinkHref("");
+    setNewLinkUrl("");
     setLinkError("");
     setIsAddingLink(false);
   }
 
   function cancelAddLink() {
     setNewLinkName("");
-    setNewLinkHref("");
+    setNewLinkUrl("");
     setLinkError("");
     setIsAddingLink(false);
   }
@@ -322,14 +328,14 @@ export function AboutPage({ content, isDemoEditMode, onEditText, onChangeSocialL
   }
 
   function saveDraftLinks() {
-    const invalidLink = draftLinks.find((link) => validateLinkInput(link.label, link.href));
+    const invalidLink = draftLinks.find((link) => validateLinkInput(link.name, link.url));
 
     if (invalidLink) {
-      setLinkError(validateLinkInput(invalidLink.label, invalidLink.href));
+      setLinkError(validateLinkInput(invalidLink.name, invalidLink.url));
       return;
     }
 
-    onChangeSocialLinks(renumberLinks(draftLinks));
+    onChangeSocialLinks(renumberLinks(draftLinks.map((link) => ({ ...link, icon: iconKeyForName(link.name) }))));
     setIsEditingLinks(false);
     setLinkError("");
   }
@@ -352,23 +358,32 @@ function renumberLinks(links: SocialLink[]) {
   }));
 }
 
-function validateLinkInput(label: string, href: string) {
-  if (!label.trim() || !href.trim()) return linkErrorMessage;
-  if (!isExternalLink(href.trim())) return linkErrorMessage;
+function validateLinkInput(name: string, url: string) {
+  if (!name.trim() || !url.trim()) return linkErrorMessage;
+  if (!isExternalLink(url.trim())) return linkErrorMessage;
   return "";
 }
 
-function isExternalLink(href: string) {
-  return href.startsWith("https://") || href.startsWith("http://");
+function isExternalLink(url: string) {
+  return url.startsWith("https://") || url.startsWith("http://");
 }
 
-function iconForPlatform(label: string) {
-  const normalizedLabel = label.trim().toLowerCase();
+function iconKeyForName(name: string) {
+  const normalizedName = name.trim().toLowerCase();
 
-  if (normalizedLabel === "instagram") return Instagram;
-  if (normalizedLabel === "tiktok" || normalizedLabel === "tik tok") return Music2;
-  if (normalizedLabel === "youtube" || normalizedLabel === "you tube") return Youtube;
-  if (normalizedLabel === "facebook" || normalizedLabel === "fb") return Facebook;
+  if (normalizedName === "instagram") return "instagram";
+  if (normalizedName === "tiktok" || normalizedName === "tik tok") return "tiktok";
+  if (normalizedName === "youtube" || normalizedName === "you tube") return "youtube";
+  if (normalizedName === "facebook" || normalizedName === "fb") return "facebook";
+
+  return "link";
+}
+
+function iconForLink(link: SocialLink) {
+  if (link.icon === "instagram") return Instagram;
+  if (link.icon === "tiktok") return Music2;
+  if (link.icon === "youtube") return Youtube;
+  if (link.icon === "facebook") return Facebook;
 
   return Link;
 }

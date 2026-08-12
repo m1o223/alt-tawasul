@@ -4,7 +4,7 @@ import { AdminLoginModal } from "./components/AdminLoginModal";
 import { BottomNavigation } from "./components/BottomNavigation";
 import { DemoEditBar } from "./components/DemoEditBar";
 import { EditButtonModal, EditTextModal } from "./components/DemoEditControls";
-import { siteContent, type ActionButton, type PageId, type SiteContent } from "./data/siteContent";
+import { siteContent, type ActionButton, type PageId, type SiteContent, type SocialLink } from "./data/siteContent";
 import { AboutPage } from "./pages/AboutPage";
 import { HomePage } from "./pages/HomePage";
 import { PhotosPage } from "./pages/PhotosPage";
@@ -23,8 +23,74 @@ type ButtonEditTarget = {
   apply: (label: string, href: string, content: SiteContent) => SiteContent;
 };
 
+const socialLinksStorageKey = "alt-tawasul-demo-social-links";
+
+type StoredSocialLink = Partial<SocialLink> & {
+  label?: string;
+  href?: string;
+};
+
 function cloneContent() {
-  return structuredClone(siteContent);
+  const nextContent = structuredClone(siteContent);
+  const storedLinks = readStoredSocialLinks(nextContent.pages.about.socialLinks);
+
+  if (storedLinks.length > 0) {
+    nextContent.pages.about.socialLinks = storedLinks;
+  }
+
+  return nextContent;
+}
+
+function readStoredSocialLinks(fallbackLinks: SocialLink[]) {
+  if (typeof window === "undefined") return fallbackLinks;
+
+  try {
+    const storedValue = window.localStorage.getItem(socialLinksStorageKey);
+    if (!storedValue) return fallbackLinks;
+
+    const parsedValue = JSON.parse(storedValue) as unknown;
+    if (!Array.isArray(parsedValue)) return fallbackLinks;
+
+    const normalizedLinks = parsedValue
+      .map((item: StoredSocialLink, index) => {
+        const name = String(item.name ?? item.label ?? "").trim();
+        const url = String(item.url ?? item.href ?? "").trim();
+
+        if (!name || !url) return null;
+
+        return {
+          id: String(item.id ?? `social-${index + 1}`),
+          name,
+          url,
+          icon: String(item.icon ?? iconKeyForName(name)),
+          order: Number.isFinite(item.order) ? Number(item.order) : index + 1,
+        };
+      })
+      .filter((link): link is SocialLink => Boolean(link))
+      .sort((first, second) => first.order - second.order)
+      .map((link, index) => ({ ...link, order: index + 1 }));
+
+    return normalizedLinks.length > 0 ? normalizedLinks : fallbackLinks;
+  } catch {
+    return fallbackLinks;
+  }
+}
+
+function saveSocialLinksToStorage(links: SocialLink[]) {
+  if (typeof window === "undefined") return;
+
+  window.localStorage.setItem(socialLinksStorageKey, JSON.stringify(links));
+}
+
+function iconKeyForName(name: string) {
+  const normalizedName = name.trim().toLowerCase();
+
+  if (normalizedName === "instagram") return "instagram";
+  if (normalizedName === "tiktok" || normalizedName === "tik tok") return "tiktok";
+  if (normalizedName === "youtube" || normalizedName === "you tube") return "youtube";
+  if (normalizedName === "facebook" || normalizedName === "fb") return "facebook";
+
+  return "link";
 }
 
 export function App() {
@@ -137,16 +203,20 @@ export function App() {
             isDemoEditMode={isDemoEditMode}
             onEditText={openTextEdit}
             onChangeSocialLinks={(socialLinks) =>
-              setContent((currentContent) => ({
-                ...currentContent,
-                pages: {
-                  ...currentContent.pages,
-                  about: {
-                    ...currentContent.pages.about,
-                    socialLinks,
+              setContent((currentContent) => {
+                saveSocialLinksToStorage(socialLinks);
+
+                return {
+                  ...currentContent,
+                  pages: {
+                    ...currentContent.pages,
+                    about: {
+                      ...currentContent.pages.about,
+                      socialLinks,
+                    },
                   },
-                },
-              }))
+                };
+              })
             }
           />
         ) : null}
