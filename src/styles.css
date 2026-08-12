@@ -399,11 +399,23 @@ p {
   gap: 14px;
 }
 
+.follow-heading-row {
+  display: grid;
+  gap: 12px;
+}
+
 .follow-section h2 {
   color: var(--text);
   font-size: 24px;
   font-weight: 900;
   line-height: 1.25;
+}
+
+.social-admin-actions,
+.social-form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .social-links {
@@ -420,6 +432,120 @@ p {
   gap: 8px;
   border-radius: 18px;
   font-weight: 850;
+}
+
+.social-link-form,
+.social-link-editor {
+  display: grid;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #fbfdff;
+}
+
+.social-link-form label,
+.social-edit-row label {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.social-link-form input,
+.social-edit-row input {
+  width: 100%;
+  min-height: 46px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 0 12px;
+  color: var(--text);
+  background: var(--white);
+  font: inherit;
+  outline: none;
+}
+
+.social-link-form input:focus,
+.social-edit-row input:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(73, 170, 242, 0.15);
+}
+
+.compact-button {
+  min-height: 42px;
+  margin-top: 0;
+  border-radius: 14px;
+  padding: 0 16px;
+}
+
+.social-edit-row {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 9px;
+  align-items: start;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.social-edit-row:last-of-type {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.social-edit-icon {
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  border-radius: 999px;
+  color: var(--white);
+  background: var(--blue-active);
+}
+
+.social-edit-body {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+
+.social-edit-indicator {
+  justify-self: start;
+  min-height: 30px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  padding: 0 10px;
+  color: var(--blue-active);
+  background: #f4fbff;
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.social-row-tools {
+  display: flex;
+  gap: 7px;
+}
+
+.social-row-tools button {
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 999px;
+  color: var(--white);
+  background: var(--blue);
+}
+
+.social-row-tools button:disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
 }
 
 .modal-backdrop {
@@ -595,6 +721,7 @@ p {
 .edit-chip:focus-visible,
 .add-photo-button:focus-within,
 .photo-edit-tools button:focus-visible,
+.social-row-tools button:focus-visible,
 .modal-close:focus-visible,
 .secondary-button:focus-visible {
   outline: 3px solid #111827;

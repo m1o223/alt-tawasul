@@ -136,7 +136,18 @@ export function App() {
             content={content.pages.about}
             isDemoEditMode={isDemoEditMode}
             onEditText={openTextEdit}
-            onEditButton={openButtonEdit}
+            onChangeSocialLinks={(socialLinks) =>
+              setContent((currentContent) => ({
+                ...currentContent,
+                pages: {
+                  ...currentContent.pages,
+                  about: {
+                    ...currentContent.pages.about,
+                    socialLinks,
+                  },
+                },
+              }))
+            }
           />
         ) : null}
       </main>

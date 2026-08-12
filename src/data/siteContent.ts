@@ -116,9 +116,9 @@ export const siteContent: SiteContent = {
         "التواصل البديل موقع تجريبي قيد التصميم، هدفه عرض تجربة بسيطة ونظيفة تناسب تصفح الجوال قبل إضافة المحتوى الحقيقي.",
       followTitle: "تابعونا",
       socialLinks: [
-        { id: "instagram", label: "Instagram", href: "#", order: 1 },
-        { id: "tiktok", label: "TikTok", href: "#", order: 2 },
-        { id: "youtube", label: "YouTube", href: "#", order: 3 },
+        { id: "instagram", label: "Instagram", href: "https://www.instagram.com/example", order: 1 },
+        { id: "tiktok", label: "TikTok", href: "https://www.tiktok.com/@example", order: 2 },
+        { id: "youtube", label: "YouTube", href: "https://www.youtube.com/@example", order: 3 },
       ],
     },
   },
